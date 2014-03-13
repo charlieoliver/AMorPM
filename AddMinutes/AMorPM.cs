@@ -39,60 +39,65 @@ namespace Minutes
                 Console.WriteLine("Improper Format, confirm contains {H}H:MM:SS");
                 return string.Empty;
             }
+
             int h, m, s = 0;
-            int.TryParse(hms[0], out h);
-            int.TryParse(hms[1], out m);
-            int.TryParse(hms[2], out s);
-
-            int additionalHours = additionalMinutes / 60;
-            additionalMinutes = additionalMinutes % 60;
-
-            h = h + additionalHours;
-            if (h > 12)
+            if (int.TryParse(hms[0], out h) && int.TryParse(hms[1], out m) && int.TryParse(hms[2], out s))
             {
-                h = h % 12;
-                if (h == 0)
-                    h = 12;
-                else
-                    if (meridiem.ToUpper() == "AM")
-                        meridiem = "PM";
-                    else if (meridiem.ToUpper() == "PM")
-                        meridiem = "AM";
-            }
+                int additionalHours = additionalMinutes / 60;
+                additionalMinutes = additionalMinutes % 60;
 
-            m = m + additionalMinutes;
-            if (m > 59)
-            {
-                m = m % 60;
-                if (h + 1 == 12)
+                h = h + additionalHours;
+                if (h > 12)
                 {
-                    h++;
-                    if (meridiem.ToUpper() == "AM")
-                        meridiem = "PM";
-                    else if (meridiem.ToUpper() == "PM")
-                        meridiem = "AM";
+                    h = h % 12;
+                    if (h == 0)
+                        h = 12;
+                    else
+                        if (meridiem.ToUpper() == "AM")
+                            meridiem = "PM";
+                        else if (meridiem.ToUpper() == "PM")
+                            meridiem = "AM";
                 }
-                else if (h + 1 == 13)
-                    h = 1;
+
+                m = m + additionalMinutes;
+                if (m > 59)
+                {
+                    m = m % 60;
+                    if (h + 1 == 12)
+                    {
+                        h++;
+                        if (meridiem.ToUpper() == "AM")
+                            meridiem = "PM";
+                        else if (meridiem.ToUpper() == "PM")
+                            meridiem = "AM";
+                    }
+                    else if (h + 1 == 13)
+                        h = 1;
+                }
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append(h);
+                sb.Append(":");
+                if (m < 10)
+                    sb.Append("0" + m);
+                else
+                    sb.Append(m);
+                sb.Append(":");
+                if (s < 10)
+                    sb.Append("0" + s);
+                else
+                    sb.Append(s);
+                sb.Append(" ");
+                sb.Append(meridiem);
+
+                finalTime = sb.ToString();
+                return finalTime;
             }
-
-            StringBuilder sb = new StringBuilder();
-            sb.Append(h);
-            sb.Append(":");
-            if (m < 10)
-                sb.Append("0" + m);
             else
-                sb.Append(m);
-            sb.Append(":");
-            if (s < 10)
-                sb.Append("0" + s);
-            else
-                sb.Append(s);
-            sb.Append(" ");
-            sb.Append(meridiem);
-
-            finalTime = sb.ToString();
-            return finalTime;
+            {
+                Console.WriteLine("Improper Format, confirm contains {H}H:MM:SS");
+                return string.Empty;
+            }
         }
     }
 }

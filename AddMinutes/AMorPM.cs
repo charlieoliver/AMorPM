@@ -43,6 +43,12 @@ namespace Minutes
             int h, m, s = 0;
             if (int.TryParse(hms[0], out h) && int.TryParse(hms[1], out m) && int.TryParse(hms[2], out s))
             {
+                if (h < 13 && m < 60 && s < 60)
+                {
+                    Console.WriteLine("Improper Format, out of range {H}H:MM:SS");
+                    return string.Empty;
+                }
+
                 int additionalHours = additionalMinutes / 60;
                 additionalMinutes = additionalMinutes % 60;
 
